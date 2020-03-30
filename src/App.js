@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import * as faceapi from 'face-api.js';
 import './App.css';
 
 class App extends Component {
@@ -20,37 +21,37 @@ class App extends Component {
           video.srcObject = stream
           video.addEventListener("play", () => {
 
-            // const canvas = document.getElementById('myCanvas');
-            // const displaySize = { width: video.width, height: video.height }
-            // faceapi.matchDimensions(canvas, displaySize)
+            const canvas = document.getElementById('myCanvas');
+            const displaySize = { width: video.width, height: video.height }
+            faceapi.matchDimensions(canvas, displaySize)
 
-            // setInterval(async () => {
+            setInterval(async () => {
 
-            //   const detections = await faceapi.detectAllFaces(video,
-            //     new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions().withAgeAndGender()
+              const detections = await faceapi.detectAllFaces(video,
+                new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions().withAgeAndGender()
 
-            //   console.log(detections);
-            //   const resizedDetections = faceapi.resizeResults(detections, displaySize)
-            //   canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
-
-
-            //   faceapi.draw.drawDetections(canvas, resizedDetections)
-            //   faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
-            //   faceapi.draw.drawFaceExpressions(canvas, resizedDetections)
+              console.log(detections);
+              const resizedDetections = faceapi.resizeResults(detections, displaySize)
+              canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
 
 
-            //   resizedDetections.forEach(result => {
-            //     const { age, gender, genderProbability } = result
-            //     new faceapi.draw.DrawTextField([
-            //       Math.round(age, 0) + " years",
-            //       gender
-            //       // + " " + Math.round(genderProbability, 0.5)
-            //     ],
-            //       result.detection.box.bottomRight).draw(canvas)
-            //   })
+              faceapi.draw.drawDetections(canvas, resizedDetections)
+              faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
+              faceapi.draw.drawFaceExpressions(canvas, resizedDetections)
 
 
-            // }, 1000)
+              resizedDetections.forEach(result => {
+                const { age, gender, genderProbability } = result
+                new faceapi.draw.DrawTextField([
+                  Math.round(age, 0) + " years",
+                  gender
+                  // + " " + Math.round(genderProbability, 0.5)
+                ],
+                  result.detection.box.bottomRight).draw(canvas)
+              })
+
+
+            }, 1000)
           });
         }
       )
@@ -58,11 +59,11 @@ class App extends Component {
   }
 
   async loadModels() {
-    // await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
-    // await faceapi.nets.faceLandmark68Net.loadFromUri('/models');
-    // await faceapi.nets.faceRecognitionNet.loadFromUri('/models');
-    // await faceapi.nets.faceExpressionNet.loadFromUri('/models');
-    // await faceapi.nets.ageGenderNet.loadFromUri('/models');
+    await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
+    await faceapi.nets.faceLandmark68Net.loadFromUri('/models');
+    await faceapi.nets.faceRecognitionNet.loadFromUri('/models');
+    await faceapi.nets.faceExpressionNet.loadFromUri('/models');
+    await faceapi.nets.ageGenderNet.loadFromUri('/models');
   }
 
   render() {
